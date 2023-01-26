@@ -1,4 +1,4 @@
-const UsarModuleSchema = (sequelize, Datatypes) => {
+const UserModuleSchema = (sequelize, Datatypes) => {
   const UserModuleTable = sequelize.define(
     'User',
     {
@@ -21,4 +21,4 @@ const UsarModuleSchema = (sequelize, Datatypes) => {
   return UserModuleTable;
 };
 
-module.exports = UsarModuleSchema;
+module.exports = UserModuleSchema;
