@@ -1,6 +1,6 @@
 const { decodeToken } = require('../utils/jwt');
 
-const loginMiddleware = (req, res, next) => {
+const authToken = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) res.status(401).json('Token not found');
@@ -13,4 +13,4 @@ const loginMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = loginMiddleware;
+module.exports = { authToken };
