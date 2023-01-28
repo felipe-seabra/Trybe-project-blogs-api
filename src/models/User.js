@@ -12,7 +12,7 @@ const UserModuleSchema = (sequelize, Datatypes) => {
       image: Datatypes.STRING,
     },
     {
-      timestamp: false,
+      timestamps: false,
       tableName: "users",
       underscored: true,
     }

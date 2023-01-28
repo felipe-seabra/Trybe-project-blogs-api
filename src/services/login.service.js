@@ -9,9 +9,10 @@ const validateLogin = async (email, password) => {
     };
   }
   const user = await User.findOne({
-    attributes: ['display_name', 'email', 'image'],
+    attributes: ['id', 'display_name', 'email'],
     where: { email, password },
   });
+
   if (!user) return { type: 'INVALID_FIELDS', message: 'Invalid fields' };
 
   const token = jwt.generateToken(user);
