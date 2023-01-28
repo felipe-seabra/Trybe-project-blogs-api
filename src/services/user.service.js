@@ -31,7 +31,17 @@ const findAllUsers = async () => {
   return { type: null, message: users };
 };
 
+const findById = async (id) => {
+  const user = await User.findByPk(id, {
+    attributes: { exclude: ['password'] },
+  });
+  if (!user) return { type: 'USER_NOT_FOUND', message: 'User does not exist' };
+
+  return { type: null, message: user };
+};
+
 module.exports = {
   createNewUser,
   findAllUsers,
+  findById,
 };

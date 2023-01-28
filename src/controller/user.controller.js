@@ -8,6 +8,15 @@ const listUsers = async (_req, res) => {
   res.status(200).json(message);
 };
 
+const listUserById = async (req, res) => {
+  const { id } = req.params;
+
+  const { type, message } = await userService.findById(id);
+  if (type) return res.status(errorMap.mapError(type)).json({ message });
+
+  res.status(200).json(message);
+};
+
 const createNewUser = async (req, res) => {
   const { body } = req;
 
@@ -19,5 +28,6 @@ const createNewUser = async (req, res) => {
 
 module.exports = {
   listUsers,
+  listUserById,
   createNewUser,
 };
