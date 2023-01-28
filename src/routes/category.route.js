@@ -10,5 +10,6 @@ category.post(
   middlewares.authMiddleware.authToken,
   categoryController.createNewCategory,
 );
+category.get('/', middlewares.authMiddleware.authToken, categoryController.listCategories);
 
 module.exports = category;
