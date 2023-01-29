@@ -18,6 +18,15 @@ const UserModuleSchema = (sequelize, Datatypes) => {
     }
   );
 
+  UserModuleTable.associate = (models) => {
+    UserModuleTable.hasMany(models.BlogPost,
+      {
+        foreignKey: 'userId',
+        as: 'blogPost'
+      }
+    );
+  };
+
   return UserModuleTable;
 };
 
