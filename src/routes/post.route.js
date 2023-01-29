@@ -10,5 +10,6 @@ post.post(
   middlewares.postMiddleware.validateNewPost,
   postController.createNewPost,
 );
+post.get('/', middlewares.authMiddleware.authToken, postController.listPosts);
 
 module.exports = post;

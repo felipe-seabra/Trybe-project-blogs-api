@@ -11,6 +11,14 @@ const createNewPost = async (req, res) => {
   res.status(201).json(message);
 };
 
+const listPosts = async (_req, res) => {
+  const { type, message } = await postService.findAllPosts();
+  if (type) return res.status(errorMap.mapError(type)).json({ message });
+
+  res.status(200).json(message);
+};
+
 module.exports = {
   createNewPost,
+  listPosts,
 };
