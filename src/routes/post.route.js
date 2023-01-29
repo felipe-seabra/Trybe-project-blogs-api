@@ -11,5 +11,6 @@ post.post(
   postController.createNewPost,
 );
 post.get('/', middlewares.authMiddleware.authToken, postController.listPosts);
+post.get('/:id', middlewares.authMiddleware.authToken, postController.listPostById);
 
 module.exports = post;

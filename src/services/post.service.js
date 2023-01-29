@@ -38,26 +38,36 @@ const createNewPost = async ({ title, content, userId, categoryIds }) => {
   }
 };
 
+const include = {
+  include: [
+    {
+      model: User,
+      as: 'user',
+      attributes: ['id', 'displayName', 'email', 'image'],
+    },
+    {
+      model: Category,
+      as: 'categories',
+      through: PostCategory,
+    },
+  ],
+};
+
 const findAllPosts = async () => {
-  const posts = await BlogPost.findAll({
-    include: [
-      {
-        model: User,
-        as: 'user',
-        attributes: ['id', 'displayName', 'email', 'image'],
-      },
-      {
-        model: Category,
-        as: 'categories',
-        through: PostCategory,
-      },
-    ],
-  });
+  const posts = await BlogPost.findAll(include);
 
   return { type: null, message: posts };
+};
+
+const findById = async (id) => {
+  const post = await BlogPost.findByPk(id, include);
+  if (!post) return { type: 'POST_NOT_FOUND', message: 'Post does not exist' };
+
+  return { type: null, message: post };
 };
 
 module.exports = {
   createNewPost,
   findAllPosts,
+  findById,
 };
