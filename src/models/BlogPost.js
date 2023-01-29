@@ -4,7 +4,8 @@ const BlogPostModuleSchema = (sequelize, Datatypes) => {
     {
       id: {
         type: Datatypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true, // estava dando erro se não colocar.
       },
       title: Datatypes.STRING,
       content: Datatypes.STRING,
