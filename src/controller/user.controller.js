@@ -26,8 +26,18 @@ const createNewUser = async (req, res) => {
   res.status(201).json({ token: message });
 };
 
+const deleteMe = async (req, res) => {
+  const { id } = req.user;
+
+  const { type, message } = await userService.deleteMe(id);
+  if (type) return res.status(errorMap.mapError(type)).json({ message });
+
+  res.status(204).json();
+};
+
 module.exports = {
   listUsers,
   listUserById,
   createNewUser,
+  deleteMe,
 };
