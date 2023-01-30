@@ -86,9 +86,21 @@ const updatePost = async (userId, id, title, content) => {
   return returnPostUpdated;
 };
 
+const deletePost = async (userId, id) => {
+  const postDoesNotExist = await findById(id);
+  if (postDoesNotExist.type) return { type: 'POST_NOT_FOUND', message: 'Post does not exist' };
+  const isTheOwner = await checkIfYouOwn(userId, id);
+  if (!isTheOwner) return { type: 'UNAUTHORIZED', message: 'Unauthorized user' };
+
+  await BlogPost.destroy({ where: { id } });
+
+  return { type: null, message: '' };
+};
+
 module.exports = {
   createNewPost,
   findAllPosts,
   findById,
   updatePost,
+  deletePost,
 };
