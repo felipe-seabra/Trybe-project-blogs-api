@@ -75,7 +75,6 @@ const checkIfYouOwn = async (userId, id) => {
 };
 
 const updatePost = async (userId, id, title, content) => {
-  console.log(id);
   const isTheOwner = await checkIfYouOwn(userId, id);
 
   if (!isTheOwner) return { type: 'UNAUTHORIZED', message: 'Unauthorized user' };
@@ -83,8 +82,6 @@ const updatePost = async (userId, id, title, content) => {
   await BlogPost.update({ title, content }, { where: { id } });
 
   const returnPostUpdated = await findById(id);
-
-  console.log('CONSOLE LOG: ', returnPostUpdated);
 
   return returnPostUpdated;
 };
