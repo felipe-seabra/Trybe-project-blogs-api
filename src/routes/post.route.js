@@ -11,6 +11,7 @@ post.post(
   postController.createNewPost,
 );
 post.get('/', middlewares.authMiddleware.authToken, postController.listPosts);
+post.get('/search', middlewares.authMiddleware.authToken, postController.searchPostByQuery);
 post.get('/:id', middlewares.authMiddleware.authToken, postController.listPostById);
 post.put(
   '/:id',
