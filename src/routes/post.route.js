@@ -17,8 +17,8 @@ post.put(
   '/:id',
   middlewares.authMiddleware.authToken,
   middlewares.postMiddleware.validateUpdatePost,
-  postController.updatePost,
+  postController.updatePostById,
 );
-post.delete('/:id', middlewares.authMiddleware.authToken, postController.deletePost);
+post.delete('/:id', middlewares.authMiddleware.authToken, postController.deletePostById);
 
 module.exports = post;

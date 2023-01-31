@@ -5,6 +5,21 @@ const config = require('../config/config');
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
 
+const includeForWhere = {
+  include: [
+    {
+      model: User,
+      as: 'user',
+      attributes: ['id', 'displayName', 'email', 'image'],
+    },
+    {
+      model: Category,
+      as: 'categories',
+      through: PostCategory,
+    },
+  ],
+};
+
 const findIfCategoryExists = async (ids) => {
   const categories = await Promise.all(
     ids.map(async (id) => Category.findByPk(id)),
@@ -38,56 +53,41 @@ const createNewPost = async ({ title, content, userId, categoryIds }) => {
   }
 };
 
-const include = {
-  include: [
-    {
-      model: User,
-      as: 'user',
-      attributes: ['id', 'displayName', 'email', 'image'],
-    },
-    {
-      model: Category,
-      as: 'categories',
-      through: PostCategory,
-    },
-  ],
-};
-
 const findAllPosts = async () => {
-  const posts = await BlogPost.findAll(include);
+  const posts = await BlogPost.findAll(includeForWhere);
 
   return { type: null, message: posts };
 };
 
-const findById = async (id) => {
-  const post = await BlogPost.findByPk(id, include);
+const findPostById = async (id) => {
+  const post = await BlogPost.findByPk(id, includeForWhere);
   if (!post) return { type: 'POST_NOT_FOUND', message: 'Post does not exist' };
 
   return { type: null, message: post };
 };
 
 const checkIfYouOwn = async (userId, id) => {
-  const post = await findById(id);
+  const post = await findPostById(id);
   if (post.type) return post;
 
   if (post.message.userId !== userId) return false;
   return true;
 };
 
-const updatePost = async (userId, id, title, content) => {
+const updatePostById = async (userId, id, title, content) => {
   const isTheOwner = await checkIfYouOwn(userId, id);
 
   if (!isTheOwner) return { type: 'UNAUTHORIZED', message: 'Unauthorized user' };
 
   await BlogPost.update({ title, content }, { where: { id } });
 
-  const returnPostUpdated = await findById(id);
+  const returnPostUpdated = await findPostById(id);
 
   return returnPostUpdated;
 };
 
-const deletePost = async (userId, id) => {
-  const postDoesNotExist = await findById(id);
+const deletePostById = async (userId, id) => {
+  const postDoesNotExist = await findPostById(id);
   if (postDoesNotExist.type) return { type: 'POST_NOT_FOUND', message: 'Post does not exist' };
   const isTheOwner = await checkIfYouOwn(userId, id);
   if (!isTheOwner) return { type: 'UNAUTHORIZED', message: 'Unauthorized user' };
@@ -104,14 +104,14 @@ const searchPostByQuery = async (query) => BlogPost.findAll({
       { content: { [Op.like]: query } },
     ],
   },
-  ...include,
+  ...includeForWhere,
 });
 
 module.exports = {
   createNewPost,
   findAllPosts,
-  findById,
-  updatePost,
-  deletePost,
+  findPostById,
+  updatePostById,
+  deletePostById,
   searchPostByQuery,
 };

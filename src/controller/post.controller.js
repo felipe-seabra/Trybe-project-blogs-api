@@ -21,28 +21,28 @@ const listPosts = async (_req, res) => {
 const listPostById = async (req, res) => {
   const { id } = req.params;
 
-  const { type, message } = await postService.findById(id);
+  const { type, message } = await postService.findPostById(id);
   if (type) return res.status(errorMap.mapError(type)).json({ message });
 
   res.status(200).json(message);
 };
 
-const updatePost = async (req, res) => {
+const updatePostById = async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   const userId = req.user.id;
 
-  const { type, message } = await postService.updatePost(userId, id, title, content);
+  const { type, message } = await postService.updatePostById(userId, id, title, content);
   if (type) return res.status(errorMap.mapError(type)).json({ message });
 
   res.status(200).json(message);
 };
 
-const deletePost = async (req, res) => {
+const deletePostById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
 
-  const { type, message } = await postService.deletePost(userId, id);
+  const { type, message } = await postService.deletePostById(userId, id);
   if (type) return res.status(errorMap.mapError(type)).json({ message });
 
   res.status(204).json();
@@ -64,7 +64,7 @@ module.exports = {
   createNewPost,
   listPosts,
   listPostById,
-  updatePost,
-  deletePost,
+  updatePostById,
+  deletePostById,
   searchPostByQuery,
 };
